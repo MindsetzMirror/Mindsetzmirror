@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1024">
     <title>Mindset Mirror - Psychology Matchmaker</title>
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -386,12 +386,6 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        @media (max-width: 640px) {
-            .container { padding: 25px 18px; }
-            .header h1 { font-size: 28px; }
-            .input-row { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
@@ -1173,7 +1167,7 @@
             <textarea id="q20" name="q20" class="input-style" rows="3" placeholder="e.g. 1. Honesty, 2. Emotional Calmness, 3. Supportive Nature" required></textarea>
         </div>
 
-        <!-- 4. Payment Verification (Without QR) -->
+        <!-- 4. Payment Verification -->
         <div class="payment-card">
             <h3 style="color: #fbbf24; margin-bottom: 10px;"><i class="fa-solid fa-shield-halved"></i> Payment & Verification / सुरक्षित पेमेंट</h3>
             <p style="margin-bottom: 20px; color: var(--text-muted);">Complete payment fee via Razorpay link and enter your 12-digit UTR reference number.</p>
@@ -1220,7 +1214,6 @@
     form.addEventListener('submit', e => {
         e.preventDefault();
 
-        // 10-Digit Mobile Number Validation Check
         const mobileVal = document.getElementById('mobile').value.trim();
         if(!/^\d{10}$/.test(mobileVal)) {
             alert('❌ Invalid Mobile Number!\nKripya theek 10-ankon (10 Digits) ka valid WhatsApp mobile number darj karein.');
@@ -1228,10 +1221,9 @@
             return;
         }
 
-        // 12-Digit UTR Validation Check
         const utrVal = document.getElementById('utr').value.trim();
         if(!/^\d{12}$/.test(utrVal)) {
-            alert('❌ Invalid UTR Number!\nKripya payment ka theek 12-ankon (12 Digits) ka valid UTR transaction number darj karein.');
+            alert('❌ Invalid UTR Number!\nKripya payment का theek 12-ankon (12 Digits) ka valid UTR transaction number darj karein.');
             document.getElementById('utr').focus();
             return;
         }
