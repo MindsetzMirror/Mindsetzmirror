@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024">
+    <title>Mindset Mirror - Psychology Matchmaker</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-grad: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(15, 23, 42, 0.6);
+            --input-border: rgba(255, 255, 255, 0.12);
+            --input-focus: #8b5cf6;
+            --success-grad: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0; padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 15px;
+            min-height: 100vh;
+        }
+
+        /* Modal Popup Overlay Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .modal-card {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 24px;
+            max-width: 650px;
+            width: 100%;
+            padding: 35px 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(139, 92, 246, 0.2);
+            position: relative;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .modal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #c084fc;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .modal-card h2 {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .modal-card p.subtitle {
+            color: var(--text-muted);
+            font-size: 15.5px;
+            margin-bottom: 25px;
+        }
+
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .b-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 18px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .b-item:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .b-icon {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            background: var(--primary-grad);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .b-text h4 { font-size: 16px; color: #f8fafc; margin-bottom: 3px; font-weight: 700; }
+        .b-text p { font-size: 13.5px; color: #94a3b8; line-height: 1.4; }
+
+        .start-btn {
+            width: 100%;
+            background: var(--primary-grad);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .start-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(99, 102, 241, 0.6); }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.1);
+            padding: 45px 35px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--primary-grad);
+        }
+
+        .header { text-align: center; margin-bottom: 35px; }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #c084fc;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
+            font-size: 38px;
+            font-weight: 800;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p { color: var(--text-muted); font-size: 16px; }
+
+        /* Stats Bar Styling */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 16px;
+            padding: 18px 10px;
+            margin-top: 25px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .stat-label {
+            font-size: 12.5px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        /* Reviews Section Styling */
+        .reviews-section {
+            margin-top: 45px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .review-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .review-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .rev-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rev-user {
+            font-weight: 700;
+            color: #f8fafc;
+            font-size: 15px;
+        }
+
+        .rev-stars {
+            color: #f59e0b;
+            font-size: 13px;
+        }
+
+        .rev-text {
+            color: #cbd5e1;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        .rev-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #c084fc;
+            background: rgba(139, 92, 246, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 35px 0 25px 0;
+        }
+
+        .section-title i { color: #c084fc; font-size: 20px; }
+
+        .form-group { margin-bottom: 28px; }
+
+        .question-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 15.5px;
+            color: #f1f5f9;
+            line-height: 1.5;
+        }
+
+        .q-en { display: block; color: #ffffff; font-weight: 700; font-size: 16px; margin-bottom: 3px; }
+        .q-hi { display: block; color: #cbd5e1; font-size: 14.5px; font-weight: 400; }
+
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .input-style {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-style:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        select.input-style option { background: #1e293b; color: #f8fafc; }
+
+        .radio-group { display: flex; flex-direction: column; gap: 12px; }
+
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 14px 18px;
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .radio-option:hover {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .radio-option input[type="radio"] {
+            appearance: none;
+            width: 20px; height: 20px;
+            border: 2px solid #64748b;
+            border-radius: 50%;
+            margin-right: 14px;
+            margin-top: 3px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .radio-option input[type="radio"]:checked {
+            border-color: #c084fc;
+            background: #8b5cf6;
+        }
+
+        .radio-option input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px; height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option-content { display: flex; flex-direction: column; gap: 2px; }
+        .opt-en { color: #f1f5f9; font-size: 14.5px; font-weight: 600; }
+        .opt-hi { color: #94a3b8; font-size: 13.5px; font-weight: 400; }
+
+        /* Payment Card Styling */
+        .payment-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            margin: 40px 0 30px 0;
+        }
+
+        .notice-badge {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pay-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--success-grad);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .pay-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4); }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary-grad);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5); }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #c084fc;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<!-- Benefits Popup Modal -->
+<div class="modal-overlay" id="benefitsModal">
+    <div class="modal-card">
+        <div class="modal-badge"><i class="fa-solid fa-sparkles"></i> Welcome to Mindset Mirror</div>
+        <h2>Unlock Your Mindset Twin ✨</h2>
+        <p class="subtitle">Discover people who think, act, and view life exactly like you do through AI psychological profiling.</p>
+
+        <div class="benefits-list">
+            <div class="b-item">
+                <div class="b-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="b-text">
+                    <h4>Deep Psychological Analysis</h4>
+                    <p>Evaluates your core values, conflict resolution style, and life goals.</p>
+                </div>
+            </div>
+            <div class="b-item">
+                <div class="b-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="b-text">
+                    <h4>1.6 Crore+ User Network</h4>
+                    <p>Connect with the largest community of verified psychological matches.</p>
+                </div>
+            </div>
+            <div class="b-item">
+                <div class="b-icon"><i class="fa-solid fa-clock"></i></div>
+                <div class="b-text">
+                    <h4>24-Hour Verification & Update</h4>
+                    <p>Admin verifies your payment and activates your match status within 24 hours.</p>
+                </div>
+            </div>
+            <div class="b-item">
+                <div class="b-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                <div class="b-text">
+                    <h4>Direct WhatsApp Connection</h4>
+                    <p>Get verified confirmation and connect directly with your matched profiles on WhatsApp!</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="start-btn" onclick="closeModal()">
+            <i class="fa-solid fa-rocket"></i> Start Assessment Now
+        </button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <div class="header-badge">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Smart AI Psychological Matchmaking
+        </div>
+        <h1>Mindset Mirror</h1>
+        <p>Connect with your Mindset Twin — सोच से सोच का मिलन</p>
+
+        <!-- Live Statistics Bar (1.6 Cr Users) -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number"><i class="fa-solid fa-users" style="font-size:18px;"></i> 1.6 Cr+</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><i class="fa-solid fa-face-smile" style="font-size:18px; color:#10b981;"></i> 98.4%</div>
+                <div class="stat-label">Accuracy Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><i class="fa-solid fa-bolt" style="font-size:18px; color:#f59e0b;"></i> Instant</div>
+                <div class="stat-label">AI Matching</div>
+            </div>
+        </div>
+    </div>
+
+    <form id="matchmakerForm">
+        <!-- 1. Personal Details -->
+        <div class="section-title">
+            <i class="fa-solid fa-user-gear"></i> 1. Personal Details / व्यक्तिगत जानकारी
+        </div>
+        
+        <div class="form-group">
+            <label for="fullName">
+                <span class="q-en">Full Name *</span>
+                <span class="q-hi">पूरा नाम *</span>
+            </label>
+            <input type="text" id="fullName" name="fullName" class="input-style" placeholder="Enter your full name / अपना नाम दर्ज करें" required>
+        </div>
+
+        <div class="input-row">
+            <div class="form-group">
+                <label for="gender">
+                    <span class="q-en">Gender *</span>
+                    <span class="q-hi">लिंग *</span>
+                </label>
+                <select id="gender" name="gender" class="input-style" required>
+                    <option value="">Select / चुनें</option>
+                    <option value="Male">Male / पुरुष</option>
+                    <option value="Female">Female / महिला</option>
+                    <option value="Other">Other / अन्य</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="age">
+                    <span class="q-en">Age *</span>
+                    <span class="q-hi">उम्र *</span>
+                </label>
+                <input type="number" id="age" name="age" class="input-style" min="18" max="99" placeholder="e.g. 24" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="mobile">
+                <span class="q-en">WhatsApp Mobile Number *</span>
+                <span class="q-hi">व्हाट्सएप मोबाइल नंबर (ठीक 10 अंक) *</span>
+            </label>
+            <input type="tel" id="mobile" name="mobile" class="input-style" pattern="[0-9]{10}" maxlength="10" placeholder="Enter 10-digit WhatsApp Number" required>
+        </div>
+
+        <!-- 2. Psychology Questions (MCQ) -->
+        <div class="section-title">
+            <i class="fa-solid fa-sliders"></i> 2. Psychological Assessment / मनोवैज्ञानिक प्रश्न
+        </div>
+
+        <!-- Q1 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">1. When an unexpected crisis hits your life, what is your immediate reaction?</span>
+                <span class="q-hi">1. जब जीवन में अचानक कोई बड़ी समस्या आती है, तो आप सबसे पहले क्या करते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q1" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Stay calm and formulate a strategic solution plan.</span>
+                        <span class="opt-hi">(A) शांत रहकर समाधान का प्लान बनाता/बनाती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q1" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Take immediate action without wasting time.</span>
+                        <span class="opt-hi">(B) बिना समय गंवाए तुरंत कोई एक्शन लेता/लेती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q1" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Seek advice from trusted friends or family members.</span>
+                        <span class="opt-hi">(C) करीबी दोस्तों या परिवार से सलाह लेता/लेती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q1" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Leave it to time; everything resolves naturally.</span>
+                        <span class="opt-hi">(D) समय पर छोड़ देता/देती हूँ, सब अपने आप ठीक हो जाएगा</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">2. What is the most crucial foundation of any relationship according to you?</span>
+                <span class="q-hi">2. आपके अनुसार किसी भी रिश्ते की सबसे मजबूत नींव क्या होनी चाहिए?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q2" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Giving each other complete personal freedom.</span>
+                        <span class="opt-hi">(A) एक-दूसरे को स्वतंत्रता देना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q2" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Deep emotional and psychological connection.</span>
+                        <span class="opt-hi">(B) गहरा भावनात्मक और मानसिक जुड़ाव</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q2" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Absolute honesty, trust, and loyalty.</span>
+                        <span class="opt-hi">(C) पूर्ण ईमानदारी और वफादारी</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q2" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Shared life goals, mindset, and ambition.</span>
+                        <span class="opt-hi">(D) समान जीवन लक्ष्य और महत्वाकांक्षाएँ</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">3. How do you prefer spending your free time or weekends?</span>
+                <span class="q-hi">3. खाली समय या छुट्टियों में आपको क्या करना सबसे ज्यादा पसंद है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q3" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Relaxing quietly at home reading books or watching movies.</span>
+                        <span class="opt-hi">(A) शांति से घर पर किताबें पढ़ना या फिल्में देखना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q3" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Traveling to new places and seeking adventure.</span>
+                        <span class="opt-hi">(B) नई जगहों पर घूमना और एडवेंचर करना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q3" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Socializing and partying with friends outdoors.</span>
+                        <span class="opt-hi">(C) दोस्तों के साथ पार्टी करना और बाहर मिलना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q3" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Learning a new skill or working on personal projects.</span>
+                        <span class="opt-hi">(D) कोई नई स्किल सीखना या काम पूरा करना</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">4. What is your mindset regarding money and future financial planning?</span>
+                <span class="q-hi">4. पैसों और भविष्य की प्लानिंग के बारे में आपकी क्या सोच है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q4" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) 100% focused on savings and financial security.</span>
+                        <span class="opt-hi">(A) 100% बचत और सुरक्षित भविष्य पर ध्यान</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q4" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Live in the moment; future will take care of itself.</span>
+                        <span class="opt-hi">(B) आज में जियो, कल की चिंता बाद में करेंगे</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q4" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Calculated risk-taking to scale wealth & investments.</span>
+                        <span class="opt-hi">(C) नया रिस्क लेना और इन्वेस्टमेंट्स बढ़ाना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q4" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Basic needs met is enough; happiness matters most.</span>
+                        <span class="opt-hi">(D) जरूरतें पूरी हों, बाकी खुशी ज्यादा मायने रखती है</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">5. How do you handle disagreements or heated arguments?</span>
+                <span class="q-hi">5. बहस या विवाद होने पर आप स्थिति को कैसे संभालते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q5" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Communicate strictly with facts, logic, and reasoning.</span>
+                        <span class="opt-hi">(A) लॉजिक और तथ्यों के साथ बात करता/करती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q5" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Step back to maintain peace and calm the atmosphere.</span>
+                        <span class="opt-hi">(B) शांति बनाए रखने के लिए खुद पीछे हट जाता/जाती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q5" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Stand firm on my ground to prove my point.</span>
+                        <span class="opt-hi">(C) अपनी बात साबित करने के लिए अड़ जाता/जाती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q5" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Pause conversation completely until tempers cool down.</span>
+                        <span class="opt-hi">(D) बातचीत बंद कर देता/देती हूँ ताकि माहौल ठंडा हो जाए</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">6. What do you trust the most while making important life decisions?</span>
+                <span class="q-hi">6. निर्णय लेते समय आप किस चीज़ पर सबसे ज्यादा भरोसा करते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q6" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) My gut feeling and inner intuition.</span>
+                        <span class="opt-hi">(A) अपने दिल और अंतरात्मा की आवाज (Intuition)</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q6" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Practical thinking and pros-versus-cons calculation.</span>
+                        <span class="opt-hi">(B) व्यावहारिक सोच और नुकसान-फायदे का हिसाब</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q6" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Past experiences and expert advice.</span>
+                        <span class="opt-hi">(C) दूसरों के अनुभव और विशेषज्ञों की सलाह</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q6" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Quick spontaneous decisions without overthinking.</span>
+                        <span class="opt-hi">(D) जो होगा देखा जाएगा, तुरंत फैसला</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">7. What role does social media play in your personal life?</span>
+                <span class="q-hi">7. सोशल मीडिया का आपके जीवन में कितना महत्व है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q7" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Strictly for work and useful news/information.</span>
+                        <span class="opt-hi">(A) केवल काम और काम की जानकारी के लिए</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q7" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Active social presence to stay connected with friends.</span>
+                        <span class="opt-hi">(B) एक्टिव रहने और दोस्तों से जुड़े रहने के लिए</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q7" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Dislike it; prefer staying away from social platforms.</span>
+                        <span class="opt-hi">(C) बिल्कुल पसंद नहीं, दूर रहना पसंद है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q7" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Used mostly for entertainment and leisure time.</span>
+                        <span class="opt-hi">(D) टाइमपास और मनोरंजन के लिए</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">8. How do you react when someone explicitly dislikes you?</span>
+                <span class="q-hi">8. यदि कोई व्यक्ति आपको नापसंद करता है, तो आपकी क्या प्रतिक्रिया होती है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q8" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Unbothered; it doesn't affect me at all.</span>
+                        <span class="opt-hi">(A) मुझे कोई फर्क नहीं पड़ता</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q8" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Try to understand the root cause behind it.</span>
+                        <span class="opt-hi">(B) मैं कारण जानने की कोशिश करता/करती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q8" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Maintain my distance from that person.</span>
+                        <span class="opt-hi">(C) मैं भी उससे दूरी बना लेता/लेती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q8" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Try my best to change their perception.</span>
+                        <span class="opt-hi">(D) उसका मन बदलने की कोशिश करता/करती हूँ</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">9. What is the ultimate definition of success for you?</span>
+                <span class="q-hi">9. आपके लिए सफलता का असली मतलब क्या है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q9" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Inner peace of mind and a happy, healthy family.</span>
+                        <span class="opt-hi">(A) मानसिक शांति और खुशहाल परिवार</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q9" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) High financial wealth, fame, and status.</span>
+                        <span class="opt-hi">(B) बहुत सारा पैसा और नाम</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q9" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Social respect, authority, and influential power.</span>
+                        <span class="opt-hi">(C) समाज में मान-सम्मान और पद</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q9" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Continuous self-improvement and learning daily.</span>
+                        <span class="opt-hi">(D) लगातार नया सीखना और खुद को बेहतर बनाना</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">10. How do you express or process your anger?</span>
+                <span class="q-hi">10. जब आपको किसी पर गुस्सा आता है, तो आप क्या करते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q10" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Speak out immediately and express thoughts clearly.</span>
+                        <span class="opt-hi">(A) तुरंत बोल देते हैं</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q10" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Suppress emotions inside and stay quiet.</span>
+                        <span class="opt-hi">(B) अंदर ही अंदर दबा लेते हैं</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q10" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Vent out frustration alone in isolation.</span>
+                        <span class="opt-hi">(C) अकेले में जाकर गुस्सा निकालते हैं</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q10" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Cool down first and discuss maturely later.</span>
+                        <span class="opt-hi">(D) ठंडे दिमाग से बाद में बात करते हैं</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">11. How do you deal with your past mistakes?</span>
+                <span class="q-hi">11. आप अपनी पुरानी गलतियों से कैसे निपटते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q11" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Extract lessons and move forward confidently.</span>
+                        <span class="opt-hi">(A) उनसे सीखकर आगे बढ़ जाता/जाती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q11" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Feel regret and overthink frequently.</span>
+                        <span class="opt-hi">(B) अक्सर पछतावा होता रहता है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q11" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Completely forget the past and focus on present.</span>
+                        <span class="opt-hi">(C) पुरानी बातें भूलना पसंद करता/करती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q11" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Tends to shift responsibility to circumstances.</span>
+                        <span class="opt-hi">(D) दूसरों को दोष देने की आदत है</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">12. How do you feel when meeting new people for the first time?</span>
+                <span class="q-hi">12. नए लोगों से मिलते समय आप कैसा महसूस करते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q12" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Enthusiastic, extroverted, and connect effortlessly.</span>
+                        <span class="opt-hi">(A) बहुत उत्साही और आसानी से घुल-मिल जाता/जाती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q12" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Slightly hesitant at first, takes time to open up.</span>
+                        <span class="opt-hi">(B) शुरुआत में थोड़ा हिचकिचाहट होती है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q12" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Keep it strictly professional and topic-oriented.</span>
+                        <span class="opt-hi">(C) केवल काम की बात करता/करती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q12" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Introverted; prefer avoiding unnecessary social interactions.</span>
+                        <span class="opt-hi">(D) नए लोगों से बचना पसंद करता/करती हूँ</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">13. What importance do rules and discipline hold in your daily routine?</span>
+                <span class="q-hi">13. जीवन में नियमों और अनुशासन का आपके लिए क्या महत्व है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q13" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) 100% strict discipline and structured routine.</span>
+                        <span class="opt-hi">(A) 100% अनुशासन और रूटीन जरूरी है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q13" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Flexible balance between order and spontaneity.</span>
+                        <span class="opt-hi">(B) लचीलापन (Flexibility) होना चाहिए</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q13" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Freedom from restrictive rules and expectations.</span>
+                        <span class="opt-hi">(C) नियमों से आजादी पसंद है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q13" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Depends entirely on the situation at hand.</span>
+                        <span class="opt-hi">(D) परिस्थिति के हिसाब से तय होता है</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">14. How resilient is your self-confidence during challenging times?</span>
+                <span class="q-hi">14. कठिन परिस्थितियों में आपका आत्मविश्वास कैसा रहता है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q14" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Unshakable, high, and constantly positive.</span>
+                        <span class="opt-hi">(A) हमेशा ऊंचा और सकारात्मक</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q14" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Fluctuates depending on outcomes.</span>
+                        <span class="opt-hi">(B) कभी ऊपर, कभी नीचे</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q14" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Strengthened with support from loved ones.</span>
+                        <span class="opt-hi">(C) दूसरों के सपोर्ट से बढ़ता है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q14" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Easily anxious under heavy stress.</span>
+                        <span class="opt-hi">(D) जल्दी घबरा जाता/जाती हूँ</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">15. What is the absolute dealbreaker quality in a person for you?</span>
+                <span class="q-hi">15. किसी व्यक्ति में सबसे बुरी आदत आपके लिए क्या हो सकती है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q15" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Dishonesty, lies, and manipulation.</span>
+                        <span class="opt-hi">(A) झूठ बोलना और छल करना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q15" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Lack of respect for time and commitments.</span>
+                        <span class="opt-hi">(B) समय की कद्र न करना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q15" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Arrogance, ego, and superiority complex.</span>
+                        <span class="opt-hi">(C) घमंड और अहंकार</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q15" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Constant negativity and victim mentality.</span>
+                        <span class="opt-hi">(D) नकारात्मक सोच रखना</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">16. What primary support do you seek from your ideal match?</span>
+                <span class="q-hi">16. आप अपने पार्टनर या दोस्त से किस तरह के सहयोग की उम्मीद करते हैं?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q16" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Deep mental and emotional empathy.</span>
+                        <span class="opt-hi">(A) मानसिक और भावनात्मक संबल</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q16" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Career growth and ambition encouragement.</span>
+                        <span class="opt-hi">(B) करियर और सपनों में सहयोग</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q16" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Unconditional presence through all highs and lows.</span>
+                        <span class="opt-hi">(C) हर परिस्थिति में साथ खड़े रहना</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q16" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Telepathic unspoken understanding.</span>
+                        <span class="opt-hi">(D) बिना बोले समझ जाना</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q17 -->
+        <div class="form-group">
+            <div class="question-label">
+                <span class="q-en">17. What is your fundamental attitude towards major life shifts?</span>
+                <span class="q-hi">17. बदलाव (Changes) के प्रति आपका नज़रिया कैसा है?</span>
+            </div>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q17" value="A" required>
+                    <div class="option-content">
+                        <span class="opt-en">(A) Enthusiastically welcome new growth opportunities.</span>
+                        <span class="opt-hi">(A) बदलाव का स्वागत करता/करती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q17" value="B">
+                    <div class="option-content">
+                        <span class="opt-en">(B) Adapt gradually with patience over time.</span>
+                        <span class="opt-hi">(B) धीरे-धीरे ढलता/ढलती हूँ</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q17" value="C">
+                    <div class="option-content">
+                        <span class="opt-en">(C) Prefer stability and familiar comfort zone.</span>
+                        <span class="opt-hi">(C) पुरानी चीज़ों से ही सहज महसूस होता है</span>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q17" value="D">
+                    <div class="option-content">
+                        <span class="opt-en">(D) Adapt strategically based on necessity.</span>
+                        <span class="opt-hi">(D) जरूरत के हिसाब से अपनाता/अपनाती हूँ</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- 3. Open Text Questions -->
+        <div class="section-title">
+            <i class="fa-solid fa-pen-nib"></i> 3. Descriptive Answers / आपकी व्यक्तिगत सोच
+        </div>
+
+        <div class="form-group">
+            <label for="q18">
+                <span class="q-en">18. What is your grandest dream in life that you aim to achieve? *</span>
+                <span class="q-hi">18. आपके जीवन का सबसे बड़ा सपना क्या है जिसे आप हासिल करना चाहते हैं? *</span>
+            </label>
+            <textarea id="q18" name="q18" class="input-style" rows="3" placeholder="Explain in detail / यहाँ विस्तार से लिखें..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="q19">
+                <span class="q-en">19. What is one unique perspective/quality that truly sets you apart? *</span>
+                <span class="q-hi">19. ऐसी कौन सी एक सोच/बात है जो आपको दूसरों से अलग बनाती है? *</span>
+            </label>
+            <textarea id="q19" name="q19" class="input-style" rows="3" placeholder="Explain in detail / यहाँ विस्तार से लिखें..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="q20">
+                <span class="q-en">20. What are 3 core traits you non-negotiably seek in your matched profile? *</span>
+                <span class="q-hi">20. आप जिस व्यक्ति से मैच होना चाहते हैं, उसमें कौन से 3 गुण होने चाहिए? *</span>
+            </label>
+            <textarea id="q20" name="q20" class="input-style" rows="3" placeholder="e.g. 1. Honesty, 2. Emotional Calmness, 3. Supportive Nature" required></textarea>
+        </div>
+
+        <!-- 4. Payment Verification -->
+        <div class="payment-card">
+            <h3 style="color: #fbbf24; margin-bottom: 10px;"><i class="fa-solid fa-shield-halved"></i> Payment & Verification / सुरक्षित पेमेंट</h3>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Complete payment fee via Razorpay link and enter your 12-digit UTR reference number.</p>
+            
+            <a href="https://razorpay.me/@mindsetmirror?amount=ReAdxD4L9OoPJnYkPgejwg%3D%3D" target="_blank" class="pay-btn">
+                <i class="fa-regular fa-credit-card"></i> Pay via Secured Razorpay Link
+            </a>
+
+            <div class="form-group" style="margin-top: 15px; text-align: left;">
+                <label for="utr">
+                    <span class="q-en">12-Digit UTR / Transaction Ref No. *</span>
+                    <span class="q-hi">पेमेंट का ठीक 12-अंकों का UTR / Transaction नंबर *</span>
+                </label>
+                <input type="text" id="utr" name="utr" class="input-style" pattern="[0-9]{12}" maxlength="12" placeholder="Enter exactly 12-digit UTR number" required>
+                <small style="color: #94a3b8; font-size: 12px; display: block; margin-top: 5px;">* UTR number must be exactly 12 numeric digits.</small>
+            </div>
+
+            <div class="notice-badge">
+                <i class="fa-solid fa-clock"></i> Status update & AI report will be delivered within 24 Hours!
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="subBtn">
+            <i class="fa-solid fa-paper-plane"></i> Submit Application & Find Match
+        </button>
+        <div class="loader" id="loader">
+            <i class="fa-solid fa-spinner fa-spin"></i> Submitting form, please wait...
+        </div>
+    </form>
+
+    <!-- Best Featured User Reviews Section -->
+    <div class="reviews-section">
+        <div class="section-title" style="margin-top:0;">
+            <i class="fa-solid fa-star"></i> Featured User Reviews & Experiences
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="rev-header">
+                    <span class="rev-user">Aarav Sharma</span>
+                    <span class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
+                </div>
+                <p class="rev-text">"Mindset Mirror ka AI profiling bilkul accurate tha. Mujhe exactly waisa hi mindset twin mila jaisa me sochta tha!"</p>
+                <span class="rev-tag">99.2% Match Verified</span>
+            </div>
+
+            <div class="review-card">
+                <div class="rev-header">
+                    <span class="rev-user">Priya Verma</span>
+                    <span class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
+                </div>
+                <p class="rev-text">"Payment ke baad WhatsApp par 24 ghante me response mil gaya. Highly trustworthy and unique platform!"</p>
+                <span class="rev-tag">Direct WhatsApp Connect</span>
+            </div>
+
+            <div class="review-card">
+                <div class="rev-header">
+                    <span class="rev-user">Rohan Kapoor</span>
+                    <span class="rev-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
+                </div>
+                <p class="rev-text">"Psychology-based matching best hai. Physical appearance se zyadatar soch milna zaroori hai!"</p>
+                <span class="rev-tag">Psychology Twin Found</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwTPQ0WDRvCHCtOQBegl809MZdtSuUHs4RIoO_l5v0gl-s5447SLBpwmFYoRlSdL6X5UQ/exec';
+    const form = document.getElementById('matchmakerForm');
+    const subBtn = document.getElementById('subBtn');
+    const loader = document.getElementById('loader');
+
+    function closeModal() {
+        const modal = document.getElementById('benefitsModal');
+        modal.style.animation = 'fadeIn 0.3s reverse forwards';
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
+    }
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const mobileVal = document.getElementById('mobile').value.trim();
+        if(!/^\d{10}$/.test(mobileVal)) {
+            alert('❌ Invalid Mobile Number!\nKripya theek 10-ankon (10 Digits) ka valid WhatsApp mobile number darj karein.');
+            document.getElementById('mobile').focus();
+            return;
+        }
+
+        const utrVal = document.getElementById('utr').value.trim();
+        if(!/^\d{12}$/.test(utrVal)) {
+            alert('❌ Invalid UTR Number!\nKripya payment का theek 12-ankon (12 Digits) ka valid UTR transaction number darj karein.');
+            document.getElementById('utr').focus();
+            return;
+        }
+
+        subBtn.disabled = true;
+        subBtn.style.display = 'none';
+        loader.style.display = 'block';
+
+        const formData = new FormData(form);
+        const data = { action: "submitForm" };
+        formData.forEach((value, key) => { data[key] = value; });
+
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+            if(response.status === 'success') {
+                alert('🎉 Application Submitted Successfully!\n\nSubmission ID: ' + response.submissionId + '\n\n⏳ Aapka payment aur mindset match status agle 24 Ghante (24 Hours) ke andar verify karke update kar diya jayega. Admin aapse WhatsApp par jud jayega.');
+                form.reset();
+            } else { alert('Error: ' + response.message); }
+        })
+        .catch(error => { alert('Submission Error! Please try again.'); })
+        .finally(() => {
+            subBtn.disabled = false;
+            subBtn.style.display = 'flex';
+            loader.style.display = 'none';
+        });
+    });
+</script>
+
+</body>
+</html>
