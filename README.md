@@ -1,2 +1,1 @@
 # Mindsetzmirror
-# Mindset Twins
